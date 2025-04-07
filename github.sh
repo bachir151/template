@@ -1,32 +1,39 @@
-#!/bin/bash 
+#!/bin/bash
 
+# Vérification du nombre d'arguments
 if [ $# -gt 1 ]; then 
-	echo "Nombre d'argument trop grand"
-	exit 0
+    echo "Nombre d'arguments trop grand"
+    exit 1
 fi
 
+# Demande de la commande git
+read -p "Que voulez-vous faire ? (add, branch, commit) : " commandeGit
 
-read -p "Que voulez-vous faire ? : " commandeGit
-
-if [ "$commandeGit"="add" ]; then 
-	git add .
-	exit 0
+# Exécution des commandes selon la réponse
+if [ "$commandeGit" = "add" ]; then 
+    git add .
+    exit 0
 fi
 
-if [ "$commandeGit"="branch" ]; then 
-	git branch
-	exit 0
+if [ "$commandeGit" = "branch" ]; then 
+    git branch
+    exit 0
 fi
 
-if [ "$commandeGit"="commit" ]; then 
-	echo "avant de commiter vérifier bien ta base"
-	read -p "As-tu bien vérifier ta base ? : " reponse
+if [ "$commandeGit" = "commit" ]; then 
+    echo "Avant de committer, vérifie bien ta base"
+    read -p "As-tu bien vérifié ta base ? (oui/non) : " reponse
 
-	if [ "$reponse" = "non" ]; then 
-		echo "veuillez changer de branche"
-		exit 0
-	fi
+    if [ "$reponse" = "non" ]; then 
+        echo "Veuillez changer de branche."
+        exit 1
+    fi
 
-	read -p "Ecrivez le message du commit : " com
-	git commit -m $com
+    read -p "Écrivez le message du commit : " com
+    git commit -m "$com" | > fichier.txt
+    exit 0
 fi
+
+# Si la commande n'est pas reconnue
+echo "Commande inconnue : $commandeGit"
+exit 1
